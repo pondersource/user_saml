@@ -563,6 +563,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function getAttributeKeys($name) {
 		$settings = $this->settings->get($this->settings->getProviderId());
 		$keys = explode(' ', $settings[$name] ?? $this->config->getAppValue('user_saml', $name, ''));
+		
 		if (count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
@@ -570,7 +571,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 
-	//???1
 	private function getAttributeValue($name, array $attributes) {
 		$keys = $this->getAttributeKeys($name);
 
