@@ -168,7 +168,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 		// trigger any other initialization
 		$user = $this->userManager->get($uid);
-		\OC::$server->getEventDispatcher()->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
+		$this->eventDispatcher->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
 	}
 
 	/**

@@ -26,6 +26,7 @@ use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\SabrePluginEvent;
 
 class Application extends App {
@@ -61,7 +62,7 @@ class Application extends App {
 	public function registerDavAuth() {
 		$container = $this->getContainer();
 
-		$dispatcher = $container->getServer()->getEventDispatcher();
+		$dispatcher = $container->get(IEventDispatcher::class);
 		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) use ($container) {
 			$event->getServer()->addPlugin($container->query(DavPlugin::class));
 		});
@@ -74,7 +75,7 @@ class Application extends App {
 		$session = $container->getServer()->getSession();
 		$config = $container->getServer()->getConfig();
 
-		$dispatcher = $container->getServer()->getEventDispatcher();
+        $dispatcher = $container->get(IEventDispatcher::class);
 		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
